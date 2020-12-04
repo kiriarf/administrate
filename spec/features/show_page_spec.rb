@@ -2,7 +2,8 @@ require "rails_helper"
 
 RSpec.describe "customer show page" do
   describe "paginates customers' orders" do
-    it "displays the first page by default, other pages when specified" do
+    it "displays the first page by default, other pages when specified where \
+      the total number of records exceed pagination per page limit" do
       customer = create(:customer)
       orders = create_list(:order, 4, customer: customer)
       order_ids = orders.map(&:id)
@@ -26,6 +27,22 @@ RSpec.describe "customer show page" do
 
       ids_in_table = (ids_in_page1 + ids_in_page2).uniq
       expect(ids_in_table).to match_array(order_ids)
+    end
+
+    it "displays the first page by default, other pages when specified where \
+      the total number of records don't exceed pagination per page limit" do
+      customer = create(:customer)
+      orders = create_list(:order, 1, customer: customer)
+      order_ids = orders.map(&:id)
+      ids_in_page1 = nil
+
+      visit admin_customer_path(customer)
+
+      within(table_for_attribute(:orders)) do
+        ids_in_page1 = ids_in_table
+        expect(ids_in_page1.count).to eq 1
+        expect(order_ids).to include(*ids_in_page1)
+      end
     end
 
     describe(
