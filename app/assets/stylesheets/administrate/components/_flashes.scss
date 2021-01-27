@@ -3,9 +3,9 @@
     background-color: $color;
     color: mix($black, $color, 60%);
     display: block;
-    margin-bottom: $base-spacing / 2;
-    padding: $base-spacing / 2;
-    text-align: center;
+    margin-bottom: $base-spacing / 5;
+    padding: $base-spacing / 5;
+    text-align: left;
 
     a {
       color: mix($black, $color, 70%);
